@@ -2,6 +2,7 @@ package com.example.api.controllers;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.api.dtos.CreateUserDTO;
 import com.example.api.dtos.GetUsersDTO;
-import com.example.api.models.User;
 import com.example.api.services.UserService;
 
 @RestController
@@ -36,10 +36,9 @@ public class UserController {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<User> getUserById(@PathVariable String id) {
-    return userService.getUserById(id)
-        .map(ResponseEntity::ok)
-        .orElseGet(() -> ResponseEntity.status(org.springframework.http.HttpStatus.NOT_FOUND).build());
+  public ResponseEntity<GetUsersDTO> getUserById(@PathVariable UUID id) {
+    GetUsersDTO user = userService.getUserById(id);
+    return ResponseEntity.ok(user);
   }
 
   @PostMapping()
