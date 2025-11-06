@@ -1,7 +1,9 @@
 package com.example.api.dtos;
 
+import java.util.UUID;
+
 public record GetUsersDTO(
-    String id,
-    String name,
-    String email) {
+        UUID id,
+        String name,
+        String email) {
 }
