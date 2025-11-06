@@ -1,5 +1,8 @@
 package com.example.api.controllers;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -40,9 +43,10 @@ public class UserController {
   }
 
   @PostMapping()
-  public ResponseEntity<String> createUser(@RequestBody CreateUserDTO payload) {
+  public ResponseEntity<Map<String, String>> createUser(@RequestBody CreateUserDTO payload) {
     userService.createUser(payload);
-    String message = "User created";
-    return ResponseEntity.status(HttpStatus.CREATED).body(message);
+    Map<String, String> response = new HashMap<>();
+    response.put("Message", "User created Succesfully");
+    return ResponseEntity.status(HttpStatus.CREATED).body(response);
   }
 }
