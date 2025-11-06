@@ -16,11 +16,10 @@ import com.example.api.repositories.UserRepository;
 public class UserService {
 
   private final UserRepository userRepository;
-  private final BCryptPasswordEncoder bCryptPasswordEncoder;
+  private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
-  public UserService(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
+  public UserService(UserRepository userRepository) {
     this.userRepository = userRepository;
-    this.bCryptPasswordEncoder = bCryptPasswordEncoder;
   }
 
   public Page<GetUsersDTO> getUsers(Pageable pageable) {
