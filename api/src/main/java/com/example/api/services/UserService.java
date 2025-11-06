@@ -26,7 +26,7 @@ public class UserService {
     return userRepository.findAll(pageable).map(u -> new GetUsersDTO(
         u.getId(),
         u.getName(),
-        u.getName()));
+        u.getEmail()));
   }
 
   public Optional<User> getUserById(String id) {
