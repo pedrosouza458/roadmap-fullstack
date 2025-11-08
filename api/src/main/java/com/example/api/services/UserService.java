@@ -7,13 +7,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.example.api.dtos.CreateUserDTO;
 import com.example.api.dtos.GetUsersDTO;
-
+import com.example.api.dtos.UpdateUserDTO;
 import com.example.api.models.User;
 import com.example.api.repositories.UserRepository;
-
-import jakarta.transaction.Transactional;
 
 @Service
 public class UserService {
@@ -38,14 +35,28 @@ public class UserService {
     return new GetUsersDTO(user.getId(), user.getName(), user.getEmail());
   }
 
-  @Transactional
-  public GetUsersDTO createUser(CreateUserDTO dto) {
-    User user = new User();
-    user.setName(dto.name().toString());
-    user.setEmail(dto.email());
-    String hashedPassword = bCryptPasswordEncoder.encode(dto.password());
-    user.setPassword(hashedPassword);
-    User saved = userRepository.saveAndFlush(user);
-    return new GetUsersDTO(saved.getId(), saved.getName(), saved.getEmail());
+  public GetUsersDTO updateUser(UpdateUserDTO dto) {
+
+    // get id by logged user
+    UUID id = UUID.randomUUID();
+    User userToUpdate = userRepository.findById(id)
+        .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+
+    if (dto.name() != null) {
+      userToUpdate.setName(dto.name());
+    }
+
+    if (dto.email() != null) {
+      userToUpdate.setEmail(dto.email());
+    }
+
+    if (dto.password() != null) {
+      String hashedPassword = bCryptPasswordEncoder.encode(dto.password());
+      userToUpdate.setPassword(hashedPassword);
+    }
+
+    User updatedUser = userRepository.save(userToUpdate);
+
+    return new GetUsersDTO(updatedUser.getId(), updatedUser.getName(), updatedUser.getEmail());
   }
 }
